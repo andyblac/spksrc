@@ -10,7 +10,7 @@ SSS="/var/packages/${PACKAGE}/scripts/start-stop-status"
 PATH="${INSTALL_DIR}/bin:${PATH}"
 USER="nzbget"
 GROUP="users"
-CFG_FILE="${INSTALL_DIR}/var/nzbget.conf"
+CFG_FILE="/var/services/homes/${USER}/nzbget.conf"
 TMP_DIR="${SYNOPKG_PKGDEST}/../../@tmp"
 
 SERVICETOOL="/usr/syno/bin/servicetool"
@@ -44,6 +44,12 @@ syno_group_remove ()
 
 preinst ()
 {
+    # Create user
+    synouser --get ${USER}
+    if [ $? -ne 0 ]; then
+        # create user with random password
+        synouser --add ${USER} `uuidgen | cut -c-8` 'NZBGet User' '' '' ''
+    fi
     # Check directory
     if [ "${SYNOPKG_PKG_STATUS}" == "INSTALL" ]; then
         if [ ! -d ${wizard_download_dir:=/volume1/downloads} ]; then
@@ -63,9 +69,6 @@ postinst ()
     # Install busybox stuff
     ${INSTALL_DIR}/bin/busybox --install ${INSTALL_DIR}/bin
 
-    # Create user
-    adduser -h ${INSTALL_DIR}/var -g "${DNAME} User" -G ${GROUP} -s /bin/sh -S -D ${USER}
-
     if [ "${SYNOPKG_PKG_STATUS}" == "INSTALL" ]; then
         # Edit the configuration according to the wizard
         sed -i -e "s|@download_dir@|${wizard_download_dir:=/volume1/downloads}|g" \
@@ -80,6 +83,11 @@ postinst ()
     fi
 
     syno_group_create
+
+    # Install config
+    if [ ! -f "${CFG_FILE}" ]; then
+        cp ${INSTALL_DIR}/var/nzbget.conf ${CFG_FILE}
+    fi
 
     # Correct the files ownership
     chown -R ${USER}:root ${SYNOPKG_PKGDEST}
@@ -100,7 +108,7 @@ preuninst ()
         syno_group_remove
 
         delgroup ${USER} ${GROUP}
-        deluser ${USER}
+        synouser --del ${USER}
     fi
 
     # Remove firewall config
