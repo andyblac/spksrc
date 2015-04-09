@@ -1,0 +1,54 @@
+diff --git libavformat/movenc.c libavformat/movenc.c
+index b3287ca..1107a5b 100644
+--- libavformat/movenc.c
++++ libavformat/movenc.c
+@@ -3773,23 +3773,43 @@ static void enable_tracks(AVFormatContext *s)
+             st->codec->codec_type >= AVMEDIA_TYPE_NB)
+             continue;
+
++        // note the first stream number for each type
+         if (first[st->codec->codec_type] < 0)
+             first[st->codec->codec_type] = i;
+-        if (st->disposition & AV_DISPOSITION_DEFAULT) {
+-            mov->tracks[i].flags |= MOV_TRACK_ENABLED;
+-            enabled[st->codec->codec_type]++;
+-        }
++
++        // note whether each media type has any enabled streams
++        if (st->disposition & AV_DISPOSITION_DEFAULT)
++            enabled[st->codec->codec_type] = 1;
++
++        // clear the enables for each stream and track
++        st->disposition &= ~AV_DISPOSITION_DEFAULT;
++        mov->tracks[i].flags &= ~MOV_TRACK_ENABLED;
+     }
+
++     // for each media type, if no stream was explicitly enabled
++    // then enable the first one found for that type
+     for (i = 0; i < AVMEDIA_TYPE_NB; i++) {
+         switch (i) {
+         case AVMEDIA_TYPE_VIDEO:
+         case AVMEDIA_TYPE_AUDIO:
+         case AVMEDIA_TYPE_SUBTITLE:
+-            if (enabled[i] > 1)
+-                mov->per_stream_grouping = 1;
+             if (!enabled[i] && first[i] >= 0)
++                enabled[i] = 1;
++            break;
++        }
++    }
++
++    // translate the first enabled stream of each media type
++    // into its stream being default and its output track being enabled
++    for (i = 0; i < AVMEDIA_TYPE_NB; i++) {
++        switch (i) {
++        case AVMEDIA_TYPE_VIDEO:
++        case AVMEDIA_TYPE_AUDIO:
++        case AVMEDIA_TYPE_SUBTITLE:
++            if (enabled[i]) {
++                s->streams[first[i]]->disposition |= AV_DISPOSITION_DEFAULT;
+                 mov->tracks[first[i]].flags |= MOV_TRACK_ENABLED;
++            }
+             break;
+         }
+     }
