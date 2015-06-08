@@ -15,6 +15,7 @@ GROUP="users"
 GIT="${GIT_DIR}/bin/git"
 VIRTUALENV="${PYTHON_DIR}/bin/virtualenv"
 TMP_DIR="${SYNOPKG_PKGDEST}/../../@tmp"
+CFG_FILE="/var/services/homes/${USER}/config.ini"
 
 SERVICETOOL="/usr/syno/bin/servicetool"
 FWPORTS="/var/packages/${PACKAGE}/scripts/${PACKAGE}.sc"
@@ -47,6 +48,12 @@ syno_group_remove ()
 
 preinst ()
 {
+    synouser --get ${USER}
+    if [ $? -ne 0 ]; then
+        # create user with random password
+        synouser --add ${USER} `uuidgen | cut -c-8` 'SickRage User' '' '' ''
+    fi
+
     # Check fork
     if [ "${SYNOPKG_PKG_STATUS}" == "INSTALL" ] && ! ${GIT} ls-remote --heads --exit-code ${wizard_fork_url:=git://github.com/SiCKRAGETV/SickRage.git} ${wizard_fork_branch:=master} > /dev/null 2>&1; then
         echo "Incorrect fork"
@@ -70,10 +77,12 @@ postinst ()
     chmod 777 ${INSTALL_DIR}/var/SickRage/autoProcessTV
     chmod 600 ${INSTALL_DIR}/var/SickRage/autoProcessTV/autoProcessTV.cfg
 
-    # Create user
-    adduser -h ${INSTALL_DIR}/var -g "${DNAME} User" -G ${GROUP} -s /bin/sh -S -D ${USER}
-
     syno_group_create
+
+    if [ ! -f "${CFG_FILE}" ]; then
+        # Install config
+        cp ${INSTALL_DIR}/var/config.ini ${CFG_FILE}
+    fi
 
     # Correct the files ownership
     chown -R ${USER}:root ${SYNOPKG_PKGDEST}
@@ -94,7 +103,7 @@ preuninst ()
         synco_group_remove
 
         delgroup ${USER} ${GROUP}
-        deluser ${USER}
+        synouser --del ${USER}
     fi
 
     # Remove firewall config

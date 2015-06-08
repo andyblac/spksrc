@@ -13,14 +13,15 @@ USER="sickrage"
 PYTHON="${INSTALL_DIR}/env/bin/python"
 GIT="${GIT_DIR}/bin/git"
 SICKRAGE="${INSTALL_DIR}/var/SickRage/SickBeard.py"
-CFG_FILE="${INSTALL_DIR}/var/config.ini"
+HOME_DIR="/var/services/homes/${USER}"
+CFG_FILE="${HOME_DIR}/config.ini"
 PID_FILE="${INSTALL_DIR}/var/sickrage.pid"
-LOG_FILE="${INSTALL_DIR}/var/Logs/sickrage.log"
+LOG_FILE="${HOME_DIR}/sickrage.log"
 
 
 start_daemon ()
 {
-    su ${USER} -c "HOME=${INSTALL_DIR}/var PATH=${PATH} ${PYTHON} ${SICKRAGE} --daemon --pidfile ${PID_FILE} --config ${CFG_FILE} --datadir ${INSTALL_DIR}/var/"
+    su ${USER} -s /bin/sh -c "HOME=${INSTALL_DIR}/var PATH=${PATH} ${PYTHON} ${SICKRAGE} --daemon --pidfile ${PID_FILE} --config ${CFG_FILE} --datadir ${INSTALL_DIR}/var/"
 }
 
 stop_daemon ()
