@@ -12,14 +12,15 @@ PATH="${INSTALL_DIR}/bin:${INSTALL_DIR}/env/bin:${PYTHON_DIR}/bin:${GIT_DIR}/bin
 USER="couchpotatoserver-custom"
 PYTHON="${INSTALL_DIR}/env/bin/python"
 COUCHPOTATOSERVER="${INSTALL_DIR}/var/CouchPotatoServer/CouchPotato.py"
-CFG_FILE="${INSTALL_DIR}/var/settings.conf"
+HOME_DIR="/var/services/homes/${USER}"
+CFG_FILE="${HOME_DIR}/settings.conf"
 PID_FILE="${INSTALL_DIR}/var/couchpotatoserver-custom.pid"
-LOG_FILE="${INSTALL_DIR}/var/logs/CouchPotato.log"
+LOG_FILE="${HOME_DIR}/logs/CouchPotato.log"
 
 
 start_daemon ()
 {
-    su - ${USER} -c "PATH=${PATH} ${PYTHON} ${COUCHPOTATOSERVER} --daemon --pid_file ${PID_FILE} --config_file ${CFG_FILE}"
+    su ${USER} -s /bin/sh -c "PATH=${PATH} ${PYTHON} ${COUCHPOTATOSERVER} --daemon --pid_file ${PID_FILE} --config_file ${CFG_FILE}"
 }
 
 stop_daemon ()
