@@ -16,12 +16,12 @@ SICKRAGE="${INSTALL_DIR}/var/SickRage/SickBeard.py"
 HOME_DIR="/var/services/homes/${USER}"
 CFG_FILE="${HOME_DIR}/config.ini"
 PID_FILE="${INSTALL_DIR}/var/sickrage.pid"
-LOG_FILE="${HOME_DIR}/sickrage.log"
+LOG_FILE="${HOME_DIR}/Logs/sickrage.log"
 
 
 start_daemon ()
 {
-    su ${USER} -s /bin/sh -c "HOME=${INSTALL_DIR}/var PATH=${PATH} ${PYTHON} ${SICKRAGE} --daemon --pidfile ${PID_FILE} --config ${CFG_FILE} --datadir ${INSTALL_DIR}/var/"
+    su ${USER} -s /bin/sh -c "HOME=${INSTALL_DIR}/var PATH=${PATH} ${PYTHON} ${SICKRAGE} --daemon --pidfile ${PID_FILE} --config ${CFG_FILE} --datadir ${HOME_DIR}"
 }
 
 stop_daemon ()
