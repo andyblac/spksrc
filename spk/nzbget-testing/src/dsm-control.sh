@@ -12,7 +12,7 @@ USER="nzbget-testing"
 NZBGET="${INSTALL_DIR}/bin/nzbget"
 HOME_DIR="/var/services/homes/${USER}"
 CFG_FILE="${HOME_DIR}/nzbget.conf"
-PID_FILE="${INSTALL_DIR}/var/nzbget.pid"
+PID_FILE="${HOME_DIR}/nzbget.pid"
 LOG_FILE="${HOME_DIR}/nzbget.log"
 
 
