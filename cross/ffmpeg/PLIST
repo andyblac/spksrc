@@ -49,7 +49,6 @@ include/libavutil/frame.h
 include/libavutil/hmac.h
 include/libavutil/imgutils.h
 include/libavutil/intfloat.h
-include/libavutil/intfloat_readwrite.h
 include/libavutil/intreadwrite.h
 include/libavutil/lfg.h
 include/libavutil/log.h
@@ -93,7 +92,7 @@ lib/pkgconfig/libavutil.pc
 lib/pkgconfig/libswresample.pc
 lib/pkgconfig/libswscale.pc
 share/ffmpeg/examples/decoding_encoding.c
-share/ffmpeg/examples/demuxing.c
+share/ffmpeg/examples/demuxing_decoding.c
 share/ffmpeg/examples/filtering_audio.c
 share/ffmpeg/examples/filtering_video.c
 share/ffmpeg/examples/Makefile
@@ -108,8 +107,6 @@ share/ffmpeg/libvpx-1080p.ffpreset
 share/ffmpeg/libvpx-360p.ffpreset
 share/ffmpeg/libvpx-720p50_60.ffpreset
 share/ffmpeg/libvpx-720p.ffpreset
-share/ffmpeg/libx264-ipod320.ffpreset
-share/ffmpeg/libx264-ipod640.ffpreset
 share/man/man1/ffmpeg.1
 share/man/man1/ffmpeg-all.1
 share/man/man1/ffmpeg-bitstream-filters.1

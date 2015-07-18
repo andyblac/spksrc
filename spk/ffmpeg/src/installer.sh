@@ -2,14 +2,14 @@
 
 # Package
 PACKAGE="ffmpeg"
+DNAME="ffmpeg"
 
 FFMPEG_TARGET="/usr/bin/${PACKAGE}"
 FFPROBE_TARGET="/usr/bin/ffprobe"
 FFSERVER_TARGET="/usr/bin/ffserver"
+
 # Others
 INSTALL_DIR="/usr/local/${PACKAGE}"
-
-
 
 preinst ()
 {
@@ -32,6 +32,7 @@ preuninst ()
 {
     rm -f ${FFMPEG_TARGET}
     rm -f ${FFPROBE_TARGET}
+    rm -f ${FFSERVER_TARGET}
     exit 0
 }
 
