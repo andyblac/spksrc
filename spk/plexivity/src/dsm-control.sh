@@ -7,7 +7,7 @@ DNAME="plexivity"
 # Others
 INSTALL_DIR="/usr/local/${PACKAGE}"
 PYTHON_DIR="/usr/local/python"
-PATH="${INSTALL_DIR}/bin:${INSTALL_DIR}/env/bin:${PYTHON_DIR}/bin:${PATH}"
+PATH="${INSTALL_DIR}/bin:${INSTALL_DIR}/env/bin:${PYTHON_DIR}/bin:${PATH}:/usr/syno/bin"
 USER="plexivity"
 PYTHON="${INSTALL_DIR}/env/bin/python"
 PLEXIVITY="${INSTALL_DIR}/share/plexivity/plexivity.py"
