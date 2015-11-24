@@ -13,7 +13,7 @@ PYTHON="${INSTALL_DIR}/env/bin/python"
 PLEXIVITY="${INSTALL_DIR}/share/plexivity/plexivity.py"
 HOME_DIR="/var/services/homes/${USER}"
 DATA_DIR="${HOME_DIR}/"
-PID_FILE="${INSTALL_DIR}/var/plexivity.pid"
+PID_FILE="${HOME_DIR}/plexivity.pid"
 LOG_FILE="${HOME_DIR}/plexivity.log"
 
 
