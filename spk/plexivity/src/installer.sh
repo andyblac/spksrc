@@ -12,6 +12,7 @@ GIT_DIR="/usr/local/git"
 PATH="${INSTALL_DIR}/bin:${INSTALL_DIR}/env/bin:${PYTHON_DIR}/bin:${GIT_DIR}/bin:${PATH}"
 USER="plexivity"
 GROUP="nobody"
+CFG_FILE="/var/services/homes/${USER}/config.ini"
 VIRTUALENV="${PYTHON_DIR}/bin/virtualenv"
 TMP_DIR="${SYNOPKG_PKGDEST}/../../@tmp"
 
@@ -20,6 +21,13 @@ FWPORTS="/var/packages/${PACKAGE}/scripts/${PACKAGE}.sc"
 
 preinst ()
 {
+    # Create user
+    synouser --get ${USER}
+    if [ $? -ne 0 ]; then
+        # create user with random password
+        synouser --add ${USER} `uuidgen | cut -c-8` 'Plexivity User' '' '' ''
+    fi
+
     exit 0
 }
 
@@ -28,15 +36,16 @@ postinst ()
     # Link
     ln -s ${SYNOPKG_PKGDEST} ${INSTALL_DIR}
 
-
     # Create a Python virtualenv
     ${VIRTUALENV} ${INSTALL_DIR}/env > /dev/null
 
     # Install the wheels
     ${INSTALL_DIR}/env/bin/pip install --use-wheel --no-deps --no-index -U --force-reinstall -f ${INSTALL_DIR}/share/wheelhouse -r ${INSTALL_DIR}/share/wheelhouse/requirements.txt > /dev/null 2>&1
 
-    # Create user
-    adduser -h ${INSTALL_DIR}/var -g "${DNAME} User" -G ${GROUP} -s /bin/sh -S -D ${USER}
+    # Install config
+    if [ ! -f "${CFG_FILE}" ]; then
+        cp ${INSTALL_DIR}/var/config.ini ${CFG_FILE}
+    fi
 
     # Correct the files ownership
     chown -R ${USER}:root ${SYNOPKG_PKGDEST}
@@ -55,7 +64,7 @@ preuninst ()
     # Remove the user (if not upgrading)
     if [ "${SYNOPKG_PKG_STATUS}" == "UNINSTALL" ]; then
         delgroup ${USER} ${GROUP}
-        deluser ${USER}
+        synouser --del ${USER}
     fi
 
     exit 0

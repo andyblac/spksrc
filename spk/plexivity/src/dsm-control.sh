@@ -11,9 +11,10 @@ PATH="${INSTALL_DIR}/bin:${INSTALL_DIR}/env/bin:${PYTHON_DIR}/bin:${PATH}"
 USER="plexivity"
 PYTHON="${INSTALL_DIR}/env/bin/python"
 PLEXIVITY="${INSTALL_DIR}/share/plexivity/plexivity.py"
-DATA_DIR="${INSTALL_DIR}/var/"
+HOME_DIR="/var/services/homes/${USER}"
+DATA_DIR="${HOME_DIR}/"
 PID_FILE="${INSTALL_DIR}/var/plexivity.pid"
-LOG_FILE="${INSTALL_DIR}/var/plexivity.log"
+LOG_FILE="${HOME_DIR}/plexivity.log"
 
 
 start_daemon ()
