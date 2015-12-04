@@ -19,7 +19,7 @@ LOG_FILE="${HOME_DIR}/plexivity.log"
 
 start_daemon ()
 {
-    su ${USER} -c "PATH=${PATH} PLEXIVITY_DATA=${DATA_DIR} ${PYTHON} ${PLEXIVITY} --daemon"
+    su ${USER} -s /bin/sh -c "PATH=${PATH} PLEXIVITY_DATA=${DATA_DIR} ${PYTHON} ${PLEXIVITY} --daemon"
 }
 
 stop_daemon ()
