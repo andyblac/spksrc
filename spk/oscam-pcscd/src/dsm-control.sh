@@ -13,8 +13,8 @@ PID_FILE="${INSTALL_DIR}/var/oscam.pid"
 
 start_daemon ()
 {
-    su - ${RUNAS} -c "${INSTALL_DIR}/sbin/pcscd"  
-    su - ${RUNAS} -c "${OSCAM} -b -c /var/services/homes/oscam"
+    "${INSTALL_DIR}/sbin/pcscd"  
+    su - ${RUNAS} -s /bin/sh -c "${OSCAM} -b -c /var/services/homes/oscam"
     sleep 1
     pidof -s oscam > ${PID_FILE}
 }
