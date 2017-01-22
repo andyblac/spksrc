@@ -5,13 +5,12 @@ PKG_DIST_NAME = $(PKG_NAME)-$(PKG_VERS).$(PKG_EXT)
 PKG_DIST_SITE = http://downloads.sourceforge.net/opencore-amr
 PKG_DIR = $(PKG_NAME)-$(PKG_VERS)
 
-DEPENDS = 
+DEPENDS =
 
-HOMEPAGE = http://www.linuxfromscratch.org/blfs/view/svn/multimedia/fdk-aac.html
-COMMENT  = AAC library, which is purported to be a high quality Advanced Audio Coding implementation.
-LICENSE  = BSD
+HOMEPAGE = http://wiki.hydrogenaud.io/index.php?title=Fraunhofer_FDK_AAC
+COMMENT  = The Fraunhofer FDK AAC is a high-quality open-source AAC encoder library developed by Fraunhofer IIS.
+LICENSE  = FDK License & Apache 2: http://wiki.hydrogenaud.io/index.php?title=Fraunhofer_FDK_AAC#FDK_License
 
 GNU_CONFIGURE = 1
 
 include ../../mk/spksrc.cross-cc.mk
-
