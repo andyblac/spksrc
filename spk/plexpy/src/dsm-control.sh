@@ -1,24 +1,25 @@
 #!/bin/sh
 
 # Package
-PACKAGE="nzbget"
-DNAME="NZBGet"
+PACKAGE="plexpy"
+DNAME="plexpy"
 
 # Others
 INSTALL_DIR="/usr/local/${PACKAGE}"
 PYTHON_DIR="/usr/local/python"
-PATH="${INSTALL_DIR}/bin:${PYTHON_DIR}/bin:${PATH}:/usr/syno/bin"
-USER="nzbget"
-NZBGET="${INSTALL_DIR}/bin/nzbget"
+PATH="${INSTALL_DIR}/bin:${INSTALL_DIR}/env/bin:${PYTHON_DIR}/bin:${PATH}:/usr/syno/bin"
+USER="plexpy"
+PYTHON="${INSTALL_DIR}/env/bin/python"
+plexpy="${INSTALL_DIR}/var/plexpy/PlexPy.py"
 HOME_DIR="/var/services/homes/${USER}"
-CFG_FILE="${HOME_DIR}/nzbget.conf"
-PID_FILE="${HOME_DIR}/nzbget.pid"
-LOG_FILE="${HOME_DIR}/nzbget.log"
+DATA_DIR="${HOME_DIR}/"
+PID_FILE="${HOME_DIR}/plexpy.pid"
+LOG_FILE="${HOME_DIR}/logs/plexpy.log"
 
 
 start_daemon ()
 {
-    su - ${USER} -s /bin/sh -c "PATH=${PATH} ${NZBGET} -c ${CFG_FILE} -D"
+    su ${USER} -s /bin/sh -c "PATH=${PATH} plexpy_DATA=${DATA_DIR} ${PYTHON} ${plexpy} --daemon --datadir ${DATA_DIR}"
 }
 
 stop_daemon ()
@@ -30,6 +31,7 @@ stop_daemon ()
 
 daemon_status ()
 {
+    ps -aux | grep -v "grep" | grep plexpy > ${PID_FILE}
     if [ -f ${PID_FILE} ] && kill -0 `cat ${PID_FILE}` > /dev/null 2>&1; then
         return
     fi
@@ -54,21 +56,17 @@ case $1 in
     start)
         if daemon_status; then
             echo ${DNAME} is already running
-            exit 0
         else
             echo Starting ${DNAME} ...
             start_daemon
-            exit $?
         fi
         ;;
     stop)
         if daemon_status; then
             echo Stopping ${DNAME} ...
             stop_daemon
-            exit $?
         else
             echo ${DNAME} is not running
-            exit 0
         fi
         ;;
     status)
@@ -82,7 +80,6 @@ case $1 in
         ;;
     log)
         echo ${LOG_FILE}
-        exit 0
         ;;
     *)
         exit 1

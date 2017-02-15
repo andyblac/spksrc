@@ -1,0 +1,22 @@
+[{
+    "step_title": "Installatie PlexPy",
+    "items": [{
+        "type": "textfield",
+        "desc": "Klik op volgende om PlexPy te installeren. (Of vul een alternatieve URL in.)",
+        "subitems": [{
+            "key": "wizard_fork_url",
+            "desc": "Fork URL",
+            "defaultValue": "git://github.com/drzoidberg33/plexpy.git",
+            "validator": {
+                "allowBlank": false
+            }
+        }, {
+            "key": "wizard_fork_branch",
+            "desc": "Fork branch",
+            "defaultValue": "master",
+            "validator": {
+                "allowBlank": false
+            }
+        }]
+    }]
+}]
